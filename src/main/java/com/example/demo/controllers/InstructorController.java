@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.DTO.InstructorCreateRequest;
 import com.example.demo.models.Instructor;
 import com.example.demo.services.InstructorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,15 @@ public class InstructorController {
         }
     }
 
+    @PostMapping
+    public ResponseEntity<ApiResponse> createInstructor(@RequestBody InstructorCreateRequest infor){
+        try {
+            Instructor instructor = instructorService.createInstructor(infor);
+            return ResponseEntity.ok(ApiResponse.success("Thành công", instructor));
+        }catch(RuntimeException e) {
+            return  ResponseEntity.status(404).body(ApiResponse.error(e.getMessage()));
+        }
+    }
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Instructor>> updateInstructor(@PathVariable Long id, @RequestBody Instructor newInstructor) {
         Instructor instructor = instructorService.updateInstructor(id, newInstructor);
