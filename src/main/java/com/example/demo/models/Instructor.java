@@ -13,9 +13,9 @@ public class Instructor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "instructor_name", nullable = false)
+    @Column(name = "instructor_name", length = 100, nullable = false)
     private String instructorname;
 
-    @Column(unique=true)
+    @Column(unique=true, nullable = false)
     private String email;
 }
