@@ -30,12 +30,11 @@ public class InstructorService {
         return instructorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course not found id: " + id));
     }
-//    public Instructor findInstructorById(Long id){
-//        return instructorRepository.findById(id).orElse(null);
-//    }
+
     public Instructor updateInstructor(Long id, Instructor newInstructor) {
         Instructor old = instructorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course not found id: " + id));
+
         old.setInstructorname(newInstructor.getInstructorname());
         old.setEmail(newInstructor.getEmail());
         instructorRepository.save(old);

@@ -50,10 +50,11 @@ public class CourseService {
         Course existing = courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course not found id: " + id));
 
+        Instructor instructor = instructorService.getInstructorById(newCourse.getInstructor().getId());
+        if ((instructor) == null) throw new RuntimeException();
+        existing.setInstructor(instructor);
         existing.setTitle(newCourse.getTitle());
         existing.setStatus(newCourse.getStatus());
-        existing.setInstructorId(newCourse.getInstructorId());
-
         return courseRepository.save(existing);
     }
 

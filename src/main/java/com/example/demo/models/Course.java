@@ -1,8 +1,11 @@
 package com.example.demo.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 
 @Entity
@@ -22,6 +25,9 @@ public class Course {
     @Column(nullable = false)
     private CourseStatus status = CourseStatus.ACTIVE;
 
-    @Column(name = "instructor_id")
-    private Long instructorId;
+    @ManyToOne
+    @JoinColumn(name = "instructor_id")
+    @JsonIgnore
+    private Instructor instructor;
+
 }
