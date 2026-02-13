@@ -1,7 +1,7 @@
 package com.example.demo.controllers;
 
-import com.example.demo.models.StudentEnrollment;
-import com.example.demo.services.StudentEnrollmentService;
+import com.example.demo.models.Student;
+import com.example.demo.services.StudentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,20 +9,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/student-enrollments")
-public class StudentEnrollmentController {
+@RequestMapping("/api/students")
+public class StudentController {
 
-    private final StudentEnrollmentService studentEnrollmentService;
+    private final StudentService studentService;
 
-    public StudentEnrollmentController(StudentEnrollmentService studentEnrollmentService) {
-        this.studentEnrollmentService = studentEnrollmentService;
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<StudentEnrollment>>> getAllEnrollments() {
+    public ResponseEntity<ApiResponse<List<Student>>> getAlls() {
         try {
-            List<StudentEnrollment> studentEnrollments = studentEnrollmentService.getAllEnrollments();
-            return ResponseEntity.ok(ApiResponse.success("Thành công", studentEnrollments));
+            List<Student> students = studentService.getAllStudents();
+            return ResponseEntity.ok(ApiResponse.success("Thành công", students));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(ApiResponse.error(e.getMessage()));
@@ -30,10 +30,10 @@ public class StudentEnrollmentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<StudentEnrollment>> getEnrollmentById(@PathVariable long id) {
+    public ResponseEntity<ApiResponse<Student>> getById(@PathVariable long id) {
         try {
-            StudentEnrollment studentEnrollment = studentEnrollmentService.getEnrollmentById(id);
-            return ResponseEntity.ok(ApiResponse.success("Thành công", studentEnrollment));
+            Student student = studentService.getStudentById(id);
+            return ResponseEntity.ok(ApiResponse.success("Thành công", student));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(ApiResponse.error(e.getMessage()));
@@ -41,11 +41,11 @@ public class StudentEnrollmentController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<StudentEnrollment>> createEnrollment(
-            @RequestBody StudentEnrollment newStudentEnrollment
+    public ResponseEntity<ApiResponse<Student>> create(
+            @RequestBody Student newStudent
     ) {
         try {
-            StudentEnrollment created = studentEnrollmentService.createEnrollment(newStudentEnrollment);
+            Student created = studentService.createStudent(newStudent);
             return ResponseEntity.ok(ApiResponse.success("Thành công", created));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -54,13 +54,13 @@ public class StudentEnrollmentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<StudentEnrollment>> updateEnrollment(
+    public ResponseEntity<ApiResponse<Student>> update(
             @PathVariable long id,
-            @RequestBody StudentEnrollment newStudentEnrollment
+            @RequestBody Student newStudent
     ) {
         try {
-            StudentEnrollment updated =
-                    studentEnrollmentService.updateEnrollment(id, newStudentEnrollment);
+            Student updated =
+                    studentService.updateStudent(id, newStudent);
 
             return ResponseEntity.ok(ApiResponse.success("Thành công", updated));
         } catch (RuntimeException e) {
@@ -70,9 +70,9 @@ public class StudentEnrollmentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteEnrollment(@PathVariable long id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable long id) {
         try {
-            studentEnrollmentService.deleteEnrollmentById(id);
+            studentService.deleteStudentById(id);
             return ResponseEntity.ok(ApiResponse.success("Thành công", null));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)

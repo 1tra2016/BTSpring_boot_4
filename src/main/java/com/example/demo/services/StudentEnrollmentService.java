@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.DTO.StudentEnrollmentRequest;
 import com.example.demo.models.Course;
 import com.example.demo.models.Instructor;
 import com.example.demo.models.Student;
@@ -18,16 +19,20 @@ public class StudentEnrollmentService {
     private final EnrollmentRepository enrollmentRepository;
     private final  StudentRepository studentRepository;
     private final CourseRepository courseRepository;
+    private final StudentService studentService;
+    private final CourseService courseService;
 
     @Autowired
     public StudentEnrollmentService(
             EnrollmentRepository enrollmentRepository,
             StudentRepository studentRepository,
-            CourseRepository courseRepository
-    ) {
+            CourseRepository courseRepository,
+            StudentService studentService, CourseService courseService) {
         this.enrollmentRepository = enrollmentRepository;
         this.studentRepository = studentRepository;
         this.courseRepository = courseRepository;
+        this.studentService = studentService;
+        this.courseService = courseService;
     }
 
     public List<StudentEnrollment> getAllEnrollments(){
@@ -44,7 +49,11 @@ public class StudentEnrollmentService {
                 .orElseThrow(() -> new RuntimeException("Course not found id: " + id));
     }
 
-    public StudentEnrollment createEnrollment(StudentEnrollment studentEnrollment){
+    public StudentEnrollment createEnrollment(StudentEnrollmentRequest req){
+        StudentEnrollment studentEnrollment = new StudentEnrollment();
+        studentEnrollment.setStudent(studentService.getStudentById(req.getStudentId()));
+        studentEnrollment.setCourse(courseService.getCourseById(req.getCourseId()));
+
         return enrollmentRepository.save(studentEnrollment);
     }
     public StudentEnrollment updateEnrollment(Long id, StudentEnrollment studentEnrollment){
@@ -65,5 +74,16 @@ public class StudentEnrollmentService {
                 .orElseThrow(() -> new RuntimeException("Course not found id: " + id));
         enrollmentRepository.delete(studentEnrollment);
         return true;
+    }
+
+    public void enrollStudent(Long studentId, Long courseId){
+        Student student = studentService.getStudentById(studentId);
+        Course course = courseService.getCourseById(courseId);
+
+        StudentEnrollment studentEnrollment = new  StudentEnrollment();
+        studentEnrollment.setStudent(student);
+        studentEnrollment.setCourse(course);
+
+        enrollmentRepository.save(studentEnrollment);
     }
 }

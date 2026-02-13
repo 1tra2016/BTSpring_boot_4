@@ -1,6 +1,8 @@
 package com.example.demo.services;
 
 
+import com.example.demo.DTO.CourseCreateRequest;
+import com.example.demo.DTO.CourseUpdateRequest;
 import com.example.demo.models.Instructor;
 import com.example.demo.models.Course;
 import com.example.demo.repositories.CourseRepository;
@@ -42,20 +44,25 @@ public class CourseService {
         return course;
     }
 
-    public Course createCourse(Course course) {
+    public Course createCourse(CourseCreateRequest req) {
+        Instructor instructor = instructorService.getInstructorById(req.getInstructorId()); //getInstructorById sẽ ném RuntimeException nếu null
+        Course course =  new Course();
+        course.setTitle(req.getTitle());
+        course.setStatus(req.getStatus());
+        course.setInstructor(instructor);
+
         return courseRepository.save(course);
     }
 
-    public Course updateCourse(Long id, Course newCourse) {
-        Course existing = courseRepository.findById(id)
+    public Course updateCourse(Long id, CourseUpdateRequest req) {
+        Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course not found id: " + id));
 
-        Instructor instructor = instructorService.getInstructorById(newCourse.getInstructor().getId());
-        if ((instructor) == null) throw new RuntimeException();
-        existing.setInstructor(instructor);
-        existing.setTitle(newCourse.getTitle());
-        existing.setStatus(newCourse.getStatus());
-        return courseRepository.save(existing);
+        Instructor instructor = instructorService.getInstructorById(req.getInstructorId());
+        course.setTitle(req.getTitle());
+        course.setStatus(req.getStatus());
+        course.setInstructor(instructor);
+        return courseRepository.save(course);
     }
 
     public boolean deleteCourse(Long id){

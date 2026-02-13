@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.DTO.StudentEnrollmentRequest;
 import com.example.demo.models.StudentEnrollment;
 import com.example.demo.services.StudentEnrollmentService;
 import org.springframework.http.HttpStatus;
@@ -42,10 +43,10 @@ public class StudentEnrollmentController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<StudentEnrollment>> createEnrollment(
-            @RequestBody StudentEnrollment newStudentEnrollment
+            @RequestBody StudentEnrollmentRequest req
     ) {
         try {
-            StudentEnrollment created = studentEnrollmentService.createEnrollment(newStudentEnrollment);
+            StudentEnrollment created = studentEnrollmentService.createEnrollment(req);
             return ResponseEntity.ok(ApiResponse.success("Thành công", created));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

@@ -1,4 +1,11 @@
 package com.example.demo.DTO;
 
-public class StudentEnrollmentCreateReques {
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class StudentEnrollmentRequest {
+    private long courseId;
+    private long studentId;
 }

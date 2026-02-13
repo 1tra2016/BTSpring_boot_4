@@ -1,5 +1,7 @@
 package com.example.demo.controllers;
 
+import com.example.demo.DTO.CourseCreateRequest;
+import com.example.demo.DTO.CourseUpdateRequest;
 import com.example.demo.models.Course;
 import com.example.demo.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +39,8 @@ public class CourseController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Course>> createCourse(@RequestBody Course newCourse) {
-        Course course = courseService.createCourse(newCourse);
+    public ResponseEntity<ApiResponse<Course>> createCourse(@RequestBody CourseCreateRequest req) {
+        Course course = courseService.createCourse(req);
         try {
             return ResponseEntity.ok(ApiResponse.success("Thành công", course));
         }catch(RuntimeException e) {
@@ -49,9 +51,9 @@ public class CourseController {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Course>> updateCourse(
             @PathVariable long id,
-            @RequestBody Course newCourse
-    ) {
-        Course course = courseService.updateCourse(id, newCourse);
+            @RequestBody CourseUpdateRequest req
+            ) {
+        Course course = courseService.updateCourse(id, req);
         try {
             return ResponseEntity.ok(ApiResponse.success("Thành công", course));
         }catch(RuntimeException e) {
